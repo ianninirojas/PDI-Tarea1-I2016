@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">        
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Prueba</title>
+      <meta name="description" content="">
+      <meta name="viewport" content="width=device-width">
+      <script src="codigo.js" language="javascript" type="text/javascript"></script>
+      <link href="estilo.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	<div class="Titulo">
+		<h1>Procesamiento Digital de Imagenes</h1>
+		<h3>Tarea 1 - Bitmap</h3>
+	</div>
+	<br><br>
+	
+	
+		<div class="botones">
+
+			<form aling="center">
+				
+				<h3>Seleccione una imagen</h3>
+					
+					<label class="boton">
+						<input type="file" id="input"/>
+						Cargar
+					</label>
+					
+				<br>
+
+				<h3>Escoja una opción</h3>
+
+				<input class="boton" type="button" value="Negativo" onclick="Controlador('Negativo')">
+				<br>
+				<input class="boton" type="button" value="Espejo Vertical" onclick="Controlador('EspejoV')">
+				<br>
+				<input class="boton" type="button" value="Espejo Horizontal" onclick="Controlador('EspejoH')">
+				<br>
+				<span>90º</span><input type="radio" name="Grado" value="90"/>
+				<span>180º</span><input type="radio" name="Grado" value="180"/>
+				<span>270º</span><input type="radio" name="Grado" value="270"/>
+				<br>
+				<input class="boton" type="button" value="Derecha" onclick="RotacionD()">
+				<input class="boton" type="button" value="Izquierda" onclick="RotacionI()">
+
+			</form>      
+
+		</div>
+		
+		<canvas class="CuadroImagen" id="canvas1"> No posee Canvas </canvas>
+
+</body>
+   
+   <script>
+	   
+	   var canvas1 = document.getElementById('canvas1'),
+		   ctx1 = canvas1.getContext('2d'),
+		   inputElement = document.getElementById("input"),
+		   Imagen;
+	   
+	   inputElement.addEventListener("change",handleFiles, false);
+	
+	</script>
+    
+    
+
+</html>
+
+
