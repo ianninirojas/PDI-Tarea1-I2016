@@ -1,0 +1,87 @@
+
+body, html {
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+}
+
+body{
+    background-color: whitesmoke;
+}
+
+
+.Titulo {
+	
+    background-color: darkslategrey;
+  	width: auto;
+	height: auto;
+	color: white;
+	font-family:sans-serif;
+	text-align: center;
+
+}
+
+.Titulo h1 {
+	margin-top: 0;
+}
+
+
+.CuadroImagen { 
+    padding:2px; 
+    margin-right:130px;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-bottom:100px; 
+    width:900px; 
+    height:600px;
+    float:right; 
+}
+
+
+.botones {
+    padding:2px;
+    width:280px; 
+    height:400px;
+    float:left;
+	font-family: sans-serif;
+    
+}
+
+input[type="file"] {
+    display: none;
+}
+
+ .boton{
+	 color: transparent;
+	 border: none;
+	 background-color:darkslategrey ;
+	 color: white;
+	 padding: 10px;
+	 font-size: 18px;
+	 border-radius: 5px;
+	 position: relative;
+	 box-sizing: border-box;
+	 transition: all 500ms ease;
+	 margin-bottom: 5px;
+	 width: 155px;
+
+}
+
+.boton:hover{
+    border-color:#adcce2; /* Modificamos el color del borde */
+ 
+    /* Cambiamos los colores del fondo degradado */
+    background:-webkit-linear-gradient(top, #00b08b, #f1f1f1); /* Chrome 10+ */
+    background:   -moz-linear-gradient(top, #00b08b, #f1f1f1); /* Firefox 3.6+ */
+    background:    -ms-linear-gradient(top, #00b08b, #f1f1f1); /* IE10 */
+    background:        linear-gradient(top, #00b08b, #f1f1f1);
+ 
+    /* Modificamos las propiedades del Box Shadow para un efecto Glow */
+    -webkit-box-shadow:inset 0 1px 0 rgba(255,255,255, .3), inset 0 0 0 1px rgba(255,255,255, .6), 0 1px 6px rgba(36, 168, 229, .3);
+    -moz-box-shadow:inset 0 1px 0 rgba(251,247,193, .3), inset 0 0 0 1px rgba(251,247,193, .3), 0 1px 6px rgba(36, 168, 229, .3);
+    box-shadow:inset 0 1px 0 rgba(251,247,193, .3), inset 0 0 0 1px rgba(251,247,193, .3), 0 1px 6px rgba(36, 168, 229, .3);
+
+}
+
+
+
