@@ -13,4 +13,7 @@ Operaciones a imagenes de formato .bmp
 3. CSS: Estilo interfaz grafica
 
 ##Ejecucion
-Abrir el documento index.html ubicado en la carpeta src. Este abrira un navegador web, con un interfaz web con una serie de botones, bastante intuitivo para su uso.
+Abrir el documento index.html ubicado en la carpeta src. Este abrira un navegador web, en donde se encuentra una interfaz la cual tiene una serie de botones bastante especificos para el uso de aplicacion.
+
+##Version
+1.0
