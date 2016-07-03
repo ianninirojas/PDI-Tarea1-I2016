@@ -1,4 +1,3 @@
-
 function handleFiles(e) { 
 	var file = e.target.files[0];
 	var reader = new FileReader();  
@@ -109,7 +108,7 @@ function getBMP(buffer) {
 				for( i; i >= 0; i-- ){
 					desplazado = numero >> i;
 					res = desplazado & mascara;                                
-					aux[p] = colores[res]; // Negro o blanco 
+					aux[p] = colores[res]; 
 					p++;
 				}
 				i = 7;
@@ -136,7 +135,7 @@ function getBMP(buffer) {
 				for( i; i >= 0; i = i - 4 ){
 					desplazado = numero >> i;
 					res = desplazado & mascara;
-					aux[p] = colores[res]; // Negro o blanco 
+					aux[p] = colores[res];  
 					p++;
 				}
 				i = 4;
@@ -157,7 +156,7 @@ function getBMP(buffer) {
 
 			for ( j; j < tamData; j++) {
 				numero = data[j];
-				aux[p] = colores[numero]; // Negro o blanco 
+				aux[p] = colores[numero];  
 				p++;
 
 			}
@@ -180,7 +179,7 @@ function getBMP(buffer) {
 
 			for ( j; j < tamData; j++) {
 				numero = data[j];
-				aux[p] = colores[numero]; // Negro o blanco 
+				aux[p] = colores[numero]; 
 				p++;
 
 			}
@@ -313,7 +312,7 @@ function Rotar90I(imagedata) {
 	}
 
 
-	//Imagen = EspejoV(EspejoH(Imagen90));
+	
 	Imagen = Imagen90;
 
 	pintar(Imagen,Imagen.height, Imagen.width );
