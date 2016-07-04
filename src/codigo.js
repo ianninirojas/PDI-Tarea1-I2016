@@ -1,3 +1,4 @@
+
 function handleFiles(e) { 
 	var file = e.target.files[0];
 	var reader = new FileReader();  
@@ -14,24 +15,12 @@ function processimage(e) {
 
 }
 
-function RGB(colores) {
-	var i = 0,
-		num = 0,
-		indice = 0,
-		rgb = [],
-		maskR = 0xFF0000,
+function RGB(pixel) {
+	var maskR = 0xFF0000,
 		maskG = 0x00FF00,
-		maskB = 0x0000FF,
-		tamColores = colores.length;
-
-	for( i; i < tamColores; i++){
-		num = colores[i];
-		rgb[indice] = (num & maskR)>>16 ;
-		rgb[indice+1] = (num & maskG)>>8;
-		rgb[indice+2] = num & maskB;
-		indice = indice + 3;
-	}
-	return rgb;
+		maskB = 0x0000FF;
+		
+	return {r: (pixel & maskR)>>16, g: (pixel & maskG)>>8, b: (pixel & maskB)};
 } 
 
 function getBMP(buffer) { 
@@ -60,139 +49,56 @@ function getBMP(buffer) {
 	bitmap.infoheader.biClrImportant  = datav.getUint32(50, true);
 
 	var startData = bitmap.fileheader.bfOffBits;  
-
+	bitmap.stride = Math.floor((bitmap.infoheader.biBitCount*bitmap.infoheader.biWidth +31) / 32) * 4;
+	bitmap.pixels = new Uint8Array(buffer, startData);					
 
 	if ( bitmap.infoheader.biBitCount == 24 ) {
 
-		bitmap.PC = false;
-
-		bitmap.stride = Math.floor((bitmap.infoheader.biBitCount*bitmap.infoheader.biWidth +31) / 32) * 4;
-
-		bitmap.pixels = new Uint8Array(buffer, startData);					
+		bitmap.PC = false;			
 	} 
-	else {
-
+	else {	
+		
 		bitmap.PC = true;
-
-		var numero,
-			desplazado, 
-			res,
-			j = 0,
-			k = 0,
-			p = 0,
-			startPaleta = 54,
+		
+		var startPaleta = 54,
 			colores = [],
-			aux = [];
-
-		if ( bitmap.infoheader.biBitCount == 1 ) {
-
-			var numero, 
-				desplazado, 
-				res,
-				i = 7,
-				startPaleta = 54,
-				colores = [],
-				aux = [],
-				mascara = 0x1,        
-				data = new Uint8Array(buffer, startData),
-				tamData = data.length;
-
-			for ( startPaleta; startPaleta < startData; startPaleta = startPaleta+4 ){
+			k = 0;
+		
+		for ( startPaleta; startPaleta < startData; startPaleta = startPaleta+4 ){
 				colores[k] = datav.getUint32(startPaleta,true);
 				k++;
-			}
-
-			for ( j; j < tamData; j++) {
-				numero = data[j];
-
-				for( i; i >= 0; i-- ){
-					desplazado = numero >> i;
-					res = desplazado & mascara;                                
-					aux[p] = colores[res]; 
-					p++;
-				}
-				i = 7;
-			}
-			bitmap.pixels = RGB(aux);
 		}
-
-		else if ( bitmap.infoheader.biBitCount == 4 ) {
-
-			var i = 4,
-				mascara = 0xF,        
-				data = new Uint8Array(buffer, startData),
-				tamData = data.length;
-
-			for ( startPaleta; startPaleta < startData; startPaleta = startPaleta+4 ){
-				colores[k] = datav.getUint32(startPaleta,true);
-				k++;
-			}
-
-
-			for ( j; j < tamData; j++) {
-				numero = data[j];
-
-				for( i; i >= 0; i = i - 4 ){
-					desplazado = numero >> i;
-					res = desplazado & mascara;
-					aux[p] = colores[res];  
-					p++;
-				}
-				i = 4;
-			}
-
-			bitmap.pixels = RGB(aux);
-		}
-
-		else if ( bitmap.infoheader.biBitCount == 8 ) {
-
-			var data = new Uint8Array(buffer, startData),
-				tamData = data.length;
-
-			for ( startPaleta; startPaleta < startData; startPaleta = startPaleta+4 ){
-				colores[k] = datav.getUint32(startPaleta,true);
-				k++;
-			}
-
-			for ( j; j < tamData; j++) {
-				numero = data[j];
-				aux[p] = colores[numero];  
-				p++;
-
-			}
-
-		bitmap.pixels = RGB(aux);
-
-		}
-
-		else if ( bitmap.infoheader.biBitCount == 16 ) {
-
-			var i = 4,      
-				data = new Uint16Array(buffer, startData),
-				tamData = data.length;
-
-			for ( startPaleta; startPaleta < startData; startPaleta = startPaleta+4 ){
-				colores[k] = datav.getUint32(startPaleta,true);
-				k++;
-			}
-
-
-			for ( j; j < tamData; j++) {
-				numero = data[j];
-				aux[p] = colores[numero]; 
-				p++;
-
-			}
-
-		bitmap.pixels = RGB(aux);
-
-		}
-
-
 	}
-
+	
+	bitmap.paleta = colores;
+	
 	return bitmap; 
 }
+
+function ReadData(bitmap, x, y) {
+      
+      var byteToRead,
+		  bitToRead;
+         
+	
+		switch(bitmap.infoheader.biBitCount) {
+
+			case 1: 
+			  byteToRead = Math.ceil(y * bitmap.stride + x / 8);
+			  bitToRead = (7 - (x % 8));
+			  return (0x1 & (bitmap.pixels[byteToRead] >> bitToRead));
+
+			case 4:
+			  byteToRead = Math.ceil(y * bitmap.stride + x / 2);
+			  bitesToRead = ((x % 2) == 0) ? 4 : 0;
+			  return (0xF & (bitmap.pixels[byteToRead] >> bitesToRead));
+
+			case 8:
+			  byteToRead = (y * bitmap.stride) + x;
+			  return (0xFF & bitmap.pixels[byteToRead]);
+		  }
+    }
+
 
 function convertToImageData(bitmap) { 
 	canvas = document.createElement("canvas"); 
@@ -203,19 +109,22 @@ function convertToImageData(bitmap) {
 	var data = imageData.data;
 	var bmpdata = bitmap.pixels; 
 	var stride = bitmap.stride;
+	var pixel;
 
 	if ( bitmap.PC) {
-
-		var index2 = 0;
+		
 		for (var y = 0; y < Height; ++y) { 
-			for (var x = 0; x < Width; ++x) { 
+			for (var x = 0; x < Width; ++x) {
 				var index1 = (x+Width*(Height-y))*4; 
-
-				data[index1] = bmpdata[index2];
-				data[index1 + 1] = bmpdata[index2 + 1];
-				data[index1 + 2] = bmpdata[index2 + 2];
-				data[index1 + 3] = 255; 
-				index2 = index2 + 3;
+				
+				pixel = ReadData(bitmap,x,y);
+				color = bitmap.paleta[pixel];
+				M_RGB = RGB(color);
+				
+				data[index1] = M_RGB.r;
+				data[index1 + 1] = M_RGB.g; 
+				data[index1 + 2] = M_RGB.b;
+				data[index1 + 3] = 255;
 			} 
 		}                    
 	}
@@ -311,8 +220,6 @@ function Rotar90I(imagedata) {
 		p = Width-1;
 	}
 
-
-	
 	Imagen = Imagen90;
 
 	pintar(Imagen,Imagen.height, Imagen.width );
